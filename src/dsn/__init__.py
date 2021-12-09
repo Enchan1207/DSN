@@ -1,4 +1,4 @@
 #
 #
 #
-from .dsn import DSN as DSN
+from .core import DSN as DSN
