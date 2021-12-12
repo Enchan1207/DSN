@@ -21,7 +21,7 @@ class DSN():
         password (Optional[str]) : パスワード
         host     (Optional[str]) : ホスト名
         port     (Optional[int]) : ポート番号
-        path     (Optional[str]) : パス 
+        path     (str)           : パス 
     """
 
     def __init__(self, scheme: str, user: Optional[str] = None,
