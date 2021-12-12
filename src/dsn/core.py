@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from typing import Optional
 from urllib.parse import urlparse
+import re
 
 
 class DSN():
@@ -15,26 +16,68 @@ class DSN():
     最小構成: scheme://host/path
 
     Attributes:
-        scheme (str): スキーム、またはプロトコル名
-        user (Optional[str]): ユーザ名
-        password (Optional[str]): パスワード
-        host (str): ホスト名
-        port (Optional[int]): ポート番号
-        path (str): パス
+        scheme       (str)           : スキーム
+        user         (Optional[str]) : ユーザ名
+        password     (Optional[str]) : パスワード
+        host         (Optional[str]) : ホスト名
+        port         (Optional[int]) : ポート番号
+        path         (Optional[str]) : パス 
 
     """
 
-    def __init__(self, scheme: str, user: Optional[str], password: Optional[str], host: str, port: Optional[int], path: str) -> None:
-        if None in [scheme, host, path]:
-            raise ValueError(
-                "failed to instantiate DSN Object with args: scheme, host, path must not be None.")
+    def __init__(self, scheme: str, user: Optional[str] = None,
+                 password: Optional[str] = None,
+                 host: Optional[str] = None,
+                 port: Optional[int] = None,
+                 path: str = "") -> None:
+        """
+        Args:
+            scheme       (str)           : スキーム
+            user         (Optional[str]) : ユーザ名
+            password     (Optional[str]) : パスワード
+            host         (Optional[str]) : ホスト名
+            port         (Optional[int]) : ポート番号
+            path         (Optional[str]) : パス 
 
-        self.scheme: str = scheme
+        Raises:
+            ValueError: 不正な引数が与えられた場合。
+            TypeError: 引数の型が想定していたものと異なっていた場合。
+
+        """
+
+        # 型チェック
+        expected_types = [
+            (scheme, [str]),
+            (user, [str, type(None)]),
+            (password, [str, type(None)]),
+            (host, [str, type(None)]),
+            (port, [int, type(None)]),
+            (path, [str])
+        ]
+        validate_resultset = [type(types[0]) in types[1] for types in expected_types]
+        if False in validate_resultset:
+            raise TypeError("Invalid argument type")
+
         self.user: Optional[str] = user
         self.password: Optional[str] = password
         self.host: str = host
-        self.port: Optional[int] = port
         self.path: str = path
+
+        # バリデーション
+
+        if (scheme or "") == "":
+            raise ValueError("scheme must not be None or blank")
+
+        if not bool(re.match(r'^([a-z]|\.|\+|-)+$', scheme)):
+            raise ValueError(f"invalid scheme: {scheme}")
+
+        self.scheme: str = scheme
+
+        # ポート番号範囲チェック
+        if port is not None and (port < 0 or port > 65535):
+            raise ValueError(f"Invalid port range (0-65536, {port})")
+
+        self.port: Optional[int] = port
 
     def __str__(self) -> str:
         """DSNの文字列表現を返します。
@@ -103,6 +146,8 @@ class DSN():
             if parsed_dsn.hostname is None:
                 raise ValueError("Invalid DSN")
 
-            return DSN(parsed_dsn.scheme, parsed_dsn.username, parsed_dsn.password, parsed_dsn.hostname, parsed_dsn.port, parsed_dsn.path)
+            return DSN(
+                parsed_dsn.scheme, parsed_dsn.username, parsed_dsn.password, parsed_dsn.hostname, parsed_dsn.port,
+                parsed_dsn.path)
         except ValueError:
             return None
