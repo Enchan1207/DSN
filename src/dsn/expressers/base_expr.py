@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from typing import Set, Type
 
-from src.dsn import DSN
+from .. import DSN
 
 
 class __BaseExpresser:

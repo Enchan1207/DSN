@@ -1,7 +1,7 @@
 #
 # MySQL DSN Expresser
 #
-from src.dsn import DSN
+from .. import DSN
 from urllib.parse import urlunparse
 
 from .base_expr import Base

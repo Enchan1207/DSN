@@ -3,7 +3,7 @@
 #
 import re
 
-from .core import DSN
+from . import DSN
 from .expressers import expressers
 
 
