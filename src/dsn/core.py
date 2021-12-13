@@ -22,13 +22,20 @@ class DSN():
         host     (Optional[str]) : ホスト名
         port     (Optional[int]) : ポート番号
         path     (str)           : パス
+        params   (str)           : パラメータ
+        query    (str)           : クエリ
+        fragment (str)           : フラグメント
     """
 
     def __init__(self, scheme: str, user: Optional[str] = None,
                  password: Optional[str] = None,
                  host: Optional[str] = None,
                  port: Optional[int] = None,
-                 path: str = "") -> None:
+                 path: str = "",
+                 params: str = "",
+                 query: str = "",
+                 fragment: str = ""
+                 ) -> None:
         """
         Raises:
             ValueError: 不正な引数が与えられた場合。
@@ -43,7 +50,10 @@ class DSN():
             (password, [str, type(None)]),
             (host, [str, type(None)]),
             (port, [int, type(None)]),
-            (path, [str])
+            (path, [str]),
+            (params, [str]),
+            (query, [str]),
+            (fragment, [str])
         ]
         validate_resultset = [type(types[0]) in types[1] for types in expected_types]
         if False in validate_resultset:
@@ -62,6 +72,9 @@ class DSN():
         self.port: Optional[int] = port
 
         self.path: str = path
+        self.params: str = params
+        self.query: str = query
+        self.fragment: str = fragment
 
     def __str__(self) -> str:
         """DSNの文字列表現を返します。
@@ -74,14 +87,14 @@ class DSN():
             URLの形式で値を取得したい場合は `DSNExpresser.urlexpr()` を使用してください。
         """
 
-        return f"{self.scheme}://{self.user or '(None)'}:{self.password or '(None)'}@{self.host}:{self.port or '(None)'}{self.path}"
-          
+        return f"{self.scheme}://{self.user or '(None)'}:{self.password or '(None)'}@{self.host}:{self.port or '(None)'}{self.path};{self.params}?{self.query}#{self.fragment}"
+
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, DSN):
             return NotImplemented
 
         compare_param_names = [
-            "scheme", "user", "password", "host", "port", "path"
+            "scheme", "user", "password", "host", "port", "path", "query", "params", "fragment"
         ]
         compare_resultset = [getattr(self, key) == getattr(__o, key) for key in compare_param_names]
 
@@ -107,6 +120,9 @@ class DSN():
                        parsed_dsn.password,
                        parsed_dsn.hostname,
                        parsed_dsn.port,
-                       parsed_dsn.path)
+                       parsed_dsn.path,
+                       parsed_dsn.params,
+                       parsed_dsn.query,
+                       parsed_dsn.fragment)
         except (ValueError, TypeError):
             return None

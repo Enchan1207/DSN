@@ -14,7 +14,10 @@ class DSN():
         password (Optional[str]) : パスワード
         host     (Optional[str]) : ホスト名
         port     (Optional[int]) : ポート番号
-        path     (str)           : パス 
+        path     (str)           : パス
+        params   (str)           : パラメータ
+        query    (str)           : クエリ
+        fragment (str)           : フラグメント
     """
 
     scheme: str
@@ -23,12 +26,19 @@ class DSN():
     host: Optional[str]
     port: Optional[int]
     path: str
+    params: str
+    query: str
+    fragment: str
 
     def __init__(self, scheme: str, user: Optional[str] = None,
                  password: Optional[str] = None,
                  host: Optional[str] = None,
                  port: Optional[int] = None,
-                 path: str = "") -> None:
+                 path: str = "",
+                 params: str = "",
+                 query: str = "",
+                 fragment: str = ""
+                 ) -> None:
         """
         Raises:
             ValueError: 不正な引数が与えられた場合。
@@ -47,21 +57,7 @@ class DSN():
 
         """
 
-    def url(self) -> str:
-        """DSNのURL表現を返します。
-
-        Returns:
-            str: インスタンスのURL表現。
-
-        Raises:
-            ValueError: DSNをURLとして表現できない場合。
-
-        Note:
-            DSNには最低限 scheme, hostの値が必要です。
-            これらが与えられていないインスタンスにこの関数を呼び出すと、
-            ValueErrorが送出されます。
-
-        """
+    def __eq__(self, __o: object) -> bool: ...
 
     @staticmethod
     def parsefrom(dsnstring: str) -> Optional[DSN]:

@@ -29,4 +29,4 @@ class HTTPExpresser(Base):
             netloc_str += f":{dsn.port}"
 
         # urlunparseで戻す
-        return urlunparse((dsn.scheme, netloc_str, dsn.path, "", "", ""))
+        return urlunparse((dsn.scheme, netloc_str, dsn.path, dsn.params, dsn.query, dsn.fragment))
