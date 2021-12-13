@@ -21,7 +21,7 @@ class DSN():
         password (Optional[str]) : パスワード
         host     (Optional[str]) : ホスト名
         port     (Optional[int]) : ポート番号
-        path     (str)           : パス 
+        path     (str)           : パス
     """
 
     def __init__(self, scheme: str, user: Optional[str] = None,
@@ -71,22 +71,10 @@ class DSN():
 
         Note:
             DSNの文字列表現は正しいURLであることを保証しません。
-            URLの形式で値を取得したい場合は `DSN.url()` を使用してください。
+            URLの形式で値を取得したい場合は `DSNExpresser.urlexpr()` を使用してください。
         """
 
         return f"{self.scheme}://{self.user or '(None)'}:{self.password or '(None)'}@{self.host}:{self.port or '(None)'}{self.path}"
-
-    def url(self) -> str:
-        """DSNのURL表現を返します。
-
-        Returns:
-            str: インスタンスのURL表現。
-
-        Raises:
-            ValueError: DSNをURLとして表現できない場合。
-        """
-
-        return NotImplemented
 
     @staticmethod
     def parsefrom(dsnstring: str) -> Optional[DSN]:
