@@ -1,31 +1,39 @@
 from typing import Optional
 
 
-class DSN:
+class DSN():
+
     """DSNを表すクラス。
 
     DSNフォーマット: scheme://user:pass@host:port/path/to/transport
     最小構成: scheme://host/path
 
     Attributes:
-        scheme (str): スキーム、またはプロトコル名
-        user (Optional[str]): ユーザ名
-        password (Optional[str]): パスワード
-        host (str): ホスト名
-        port (Optional[int]): ポート番号
-        path (str): パス
-
+        scheme   (str)           : スキーム
+        user     (Optional[str]) : ユーザ名
+        password (Optional[str]) : パスワード
+        host     (Optional[str]) : ホスト名
+        port     (Optional[int]) : ポート番号
+        path     (str)           : パス 
     """
 
     scheme: str
     user: Optional[str]
     password: Optional[str]
-    host: str
+    host: Optional[str]
     port: Optional[int]
     path: str
 
-    def __init__(self, scheme: str, user: Optional[str], password: Optional[str],
-                 host: str, port: Optional[int], path: str) -> None: ...
+    def __init__(self, scheme: str, user: Optional[str] = None,
+                 password: Optional[str] = None,
+                 host: Optional[str] = None,
+                 port: Optional[int] = None,
+                 path: str = "") -> None:
+        """
+        Raises:
+            ValueError: 不正な引数が与えられた場合。
+            TypeError: 引数の型が想定していたものと異なっていた場合。
+        """
 
     def __str__(self) -> str:
         """DSNの文字列表現を返します。
