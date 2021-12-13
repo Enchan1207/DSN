@@ -20,8 +20,6 @@ class testHTTPExpression(TestCase):
             "https://example.com",
             "http://example.com:8080/",
             "http://example.com:8080/path/to/content",
-
-            # 現時点ではこのコたちは失敗する
             "http://example.com:8080/path/to/content?chardet=UTF-8#article",
             "http://example.com:8080/path/to/content#article"
         ]
