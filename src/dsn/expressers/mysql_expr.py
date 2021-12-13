@@ -11,7 +11,7 @@ class MySQLExpresser(Base):
 
     """ MySQLのExpresser """
 
-    __pattern__: str = "^mysql$"
+    __pattern__: str = "^mysql\+*.*$"
 
     @staticmethod
     def urlexpr(dsn: DSN) -> str:

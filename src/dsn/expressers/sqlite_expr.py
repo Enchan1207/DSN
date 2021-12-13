@@ -24,7 +24,7 @@ class SQLiteExpresser(Base):
         host = dsn.host or ""
         port = dsn.port or ""
 
-        if not ("" in [user, password, host, port]):
+        if user != "" or password != "" or host != "" or port != "":
             raise ValueError("convert failed: SQLite user, password, host, port must be blank or None")
 
         # pathが空文字だとアウト
@@ -32,4 +32,7 @@ class SQLiteExpresser(Base):
             raise ValueError("convert failed: path must not be None or blank")
 
         # urlunparseで戻す
-        return urlunparse((dsn.scheme, "", dsn.path, dsn.params, dsn.query, dsn.fragment))
+        unparsed = urlunparse((dsn.scheme, "", dsn.path, dsn.params, dsn.query, dsn.fragment))
+
+        # HACK: unparseの仕様上 sqlite:///:memory: にはならなさそう
+        return unparsed.replace(f"{dsn.scheme}:", f"{dsn.scheme}://")
