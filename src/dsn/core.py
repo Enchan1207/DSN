@@ -75,6 +75,17 @@ class DSN():
         """
 
         return f"{self.scheme}://{self.user or '(None)'}:{self.password or '(None)'}@{self.host}:{self.port or '(None)'}{self.path}"
+          
+    def __eq__(self, __o: object) -> bool:
+        if not isinstance(__o, DSN):
+            return NotImplemented
+
+        compare_param_names = [
+            "scheme", "user", "password", "host", "port", "path"
+        ]
+        compare_resultset = [getattr(self, key) == getattr(__o, key) for key in compare_param_names]
+
+        return not False in compare_resultset
 
     @staticmethod
     def parsefrom(dsnstring: str) -> Optional[DSN]:
@@ -91,11 +102,11 @@ class DSN():
         try:
             parsed_dsn = urlparse(dsnstring)
 
-            if parsed_dsn.hostname is None:
-                raise ValueError("Invalid DSN")
-
-            return DSN(
-                parsed_dsn.scheme, parsed_dsn.username, parsed_dsn.password, parsed_dsn.hostname, parsed_dsn.port,
-                parsed_dsn.path)
-        except ValueError:
+            return DSN(parsed_dsn.scheme,
+                       parsed_dsn.username,
+                       parsed_dsn.password,
+                       parsed_dsn.hostname,
+                       parsed_dsn.port,
+                       parsed_dsn.path)
+        except (ValueError, TypeError):
             return None
