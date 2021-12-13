@@ -16,7 +16,7 @@ class testUnsupportedExpression(TestCase):
         """ 非対応のスキームに対する変換 """
 
         unsupported_dsn_schemes = [
-            "ftp", "ftps", "ssh", "scp"
+            "ssh", "scp"
         ]
         dsns = [DSN(scheme) for scheme in unsupported_dsn_schemes]
 
