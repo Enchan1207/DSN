@@ -20,24 +20,22 @@ install_requires=
 ## Usage
 
 ```python
-from dsn import DSN
+from dsn import DSN, DSNExpresser
 
 # instantiate DSN from __init__
-sample_dsn_full = DSN(
-    "https", "user", "password", "example.com", 443, "/path/to/source")
-sample_dsn_simple = DSN(
-    "https", None, None, "example.com", 443, "/path/to/source")
+sample_dsn_full = DSN("https", "user", "password", "example.com", 443, "/path/to/source")
+sample_dsn_simple = DSN("https", None, None, "example.com", 443, "/path/to/source")
 
 # difference of URL representation and string representation
 print("sample_dsn_full")
 print(f"    string repr: {sample_dsn_full}")
-print(f"    url    repr: {sample_dsn_full.url()}")
+print(f"    url    repr: {DSNExpresser.urlexpr(sample_dsn_full)}")
 
 print("----")
 
 print("sample_dsn_simple")
 print(f"    string repr: {sample_dsn_simple}")
-print(f"    url    repr: {sample_dsn_simple.url()}")
+print(f"    url    repr: {DSNExpresser.urlexpr(sample_dsn_simple)}")
 
 # instantiate DSN Object from string
 url_str = "http://user:password@example.com:80/path/to/source/"
@@ -48,8 +46,8 @@ mysql_str = "mysql://user:pass@localhost:3306/test_database"
 mysql_dsn = DSN.parsefrom(mysql_str)
 assert(mysql_dsn is not None)
 
-print(url_dsn.url())
-print(mysql_dsn.url())
+print(DSNExpresser.urlexpr(url_dsn))
+print(DSNExpresser.urlexpr(mysql_dsn))
 ```
 
 ## License
