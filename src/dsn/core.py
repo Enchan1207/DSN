@@ -3,7 +3,7 @@
 #
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any, List, Optional, Tuple, Type
 from urllib.parse import urlparse
 import re
 
@@ -44,7 +44,7 @@ class DSN():
 
         # イニシャライザでは型チェックと基本的なバリデーションのみ行う
 
-        expected_types = [
+        expected_types: List[Tuple[Any, List[Type]]] = [
             (scheme, [str]),
             (user, [str, type(None)]),
             (password, [str, type(None)]),
@@ -55,7 +55,7 @@ class DSN():
             (query, [str]),
             (fragment, [str])
         ]
-        validate_resultset = [type(types[0]) in types[1] for types in expected_types]
+        validate_resultset = [type(arg) in types for arg, types in expected_types]
         if False in validate_resultset:
             raise TypeError("Invalid argument type")
 
