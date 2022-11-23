@@ -19,7 +19,11 @@ class testMySQLExpression(TestCase):
             "mysql://user:pass@localhost:3306/test_db?charset=UTF-8",
             "mysql://user:pass@127.0.0.1:3306/test_db",
             "mysql://user@127.0.0.1:3306/test_db",  # NOSONAR (sonarlintパスワード要求してくるのか…)
-            "mysql://user:pass@127.0.0.1/test_db"  # ポート省略
+            "mysql://user:pass@127.0.0.1/test_db",  # ポート省略
+            "mysql+mysqlconnector://user:pass@localhost:3306/test_db?charset=UTF-8",
+            "mysql+mysqlconnector://user:pass@127.0.0.1:3306/test_db",
+            "mysql+mysqlconnector://user@127.0.0.1:3306/test_db",  # NOSONAR (sonarlintパスワード要求してくるのか…)
+            "mysql+mysqlconnector://user:pass@127.0.0.1/test_db"  # ポート省略
         ]
 
         for dsn_str in valid_dsn_strings:
@@ -33,7 +37,8 @@ class testMySQLExpression(TestCase):
 
         invalid_dsns = [
             DSN("mysql", None, None, "localhost", 3306, "/path/to/db"),  # ログイン情報欠落
+            DSN("mariadb", None, None, "localhost", 3306, "/path/to/db"),  # 接続先間違えてますよ
         ]
         for dsn in invalid_dsns:
-            with self.assertRaises(ValueError):
+            with self.assertRaises((ValueError, TypeError)):
                 DSNExpresser.urlexpr(dsn)
